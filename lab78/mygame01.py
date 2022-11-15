@@ -11,6 +11,10 @@ def showInstructions():
     Commands:
       go [direction]
       get [item]
+    ========
+    Objective:
+      Get to the garden with a key and magic potion to win!
+      Avoid the monsters!
     ''')
 
 def showStatus():
@@ -39,12 +43,18 @@ rooms = {
                 },
 
             'Kitchen' : {
-                  'north' : 'Hall'
+                  'north' : 'Hall',
+                  'item'  : 'monster'
                 },
 
             'Dining Room' : {
-                  'west' : 'Hall'
-                }
+                  'west' : 'Hall',
+                  'south' : 'Garden',
+                  'item'  : 'potion'
+                },
+            'Garden' : {
+                  'north' : 'Dining Room'
+                  }
             }
 
 # start the player in the Hall
@@ -94,4 +104,12 @@ while True:
             #tell them they can't get it
             print('Can\'t get ' + move[1] + '!')
 
+    ## If a player enters a room with a monster
+    if 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
+        print('A monster has got you... GAME OVER!')
+        break
+    ## Define how a player can win
+    if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
+        print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
+        break
 
