@@ -19,6 +19,8 @@ def showInstructions() -> None:
       flee [direction]
     ========
     Objective:
+      Find the key to exit the castle!
+
       Find and defeat the dragon to save the Kings favourite Thanksgiving Pie!
       Beware of monsters that have overrun the castle!
 
@@ -98,7 +100,7 @@ def main():
     map = {   
         'Hall' : {
             'south' : 'Kitchen',
-            'east'  : 'Dining Room',
+            'east'  : 'Entryway',
             'north' : 'Armory',
         },
 
@@ -118,21 +120,22 @@ def main():
             'item'  : 'monster'
         },
 
-        'Dining Room' : {
+        'Entryway' : {
             'west' : 'Hall',
             'south' : 'Garden',
             'north' : 'Attic',
             'east' : 'Courtyard',
         },
         'Garden' : {
-            'north' : 'Dining Room'
+            'north' : 'Entryway',
+            'item'  : 'key'
         },
         'Attic' : {
-            'south' : 'Dining Room',
+            'south' : 'Entryway',
             'item' : 'Alpha Monster'
         },
         'Courtyard' : {
-            'west' : 'Dining Room',
+            'west' : 'Entryway',
             'north' : 'Mountain Pass',
             'east' : 'Woods'
         },
@@ -170,7 +173,7 @@ def main():
         # otherwise input will keep asking
         move = ''
         while move == '':  
-            move = input('>')
+            move = input('> ')
 
         # normalizing input:
         # .lower() makes it lower case, .split() turns it to a list
@@ -182,13 +185,25 @@ def main():
 
             #check that they are allowed wherever they want to go
             if move[1] in map[currentRoom]:
+                
+                # if move is to courtyard, ensure player has key to exit!
+                if (map[currentRoom][move[1]] == 'Courtyard'):
+                    if 'key' in player.inventory:
+                        #set the current room to the new room
+                        currentRoom = map[currentRoom][move[1]]
+                    else:
+                        # Inform player they must find the key!
+                        print('The door is locked! Find the key!')
+                        sleep(1)
 
-                #set the current room to the new room
-                currentRoom = map[currentRoom][move[1]]
+                else:
+                    #set the current room to the new room
+                    currentRoom = map[currentRoom][move[1]]
 
             # if they aren't allowed to go that way:
             else:
                 print('You can\'t go that way!')
+                sleep(1)
 
         #if they type 'get' first
         if move[0] == 'get' :
@@ -208,6 +223,7 @@ def main():
 
                 #display a helpful message
                 print(move[1] + ' got!')
+                sleep(1)
 
                 #delete the item key:value pair from the room's dictionary
                 del map[currentRoom]['item']
@@ -216,6 +232,7 @@ def main():
             else:
                 #tell them they can't get it
                 print('Can\'t get ' + move[1] + '!')
+                sleep(1)
 
         ## If a player enters a room with a monster
         if 'item' in map[currentRoom]:
@@ -282,7 +299,7 @@ def main():
                 print('The dragon has appeared before you! Attack! For the King\'s pie!!!')
 
                 # Create Dragon and initiate combat
-                sleep(2)
+                sleep(1)
                 dragon = Dragon()
                 combat(dragon, player)
 
