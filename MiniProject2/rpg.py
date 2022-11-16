@@ -299,7 +299,7 @@ def main():
                 print('The dragon has appeared before you! Attack! For the King\'s pie!!!')
 
                 # Create Dragon and initiate combat
-                sleep(1)
+                sleep(2)
                 dragon = Dragon()
                 combat(dragon, player)
 
